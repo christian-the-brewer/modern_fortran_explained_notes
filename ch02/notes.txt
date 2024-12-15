@@ -1,0 +1,137 @@
+Chapter 2 Notes
+
+2.4
+Comments are made with an ! and extend to the end of the line.
+A line can be extended with an &
+
+2.5
+Fortran has 5 intrinsic types: integer, real, complex, character, and logical.
+values of variables can change to a valid value throughout the program, unless it is declared as a constant.
+Derived types can be created from the intrinsic types to form data abstractions.
+
+2.6
+Intrinsic Types are divided into two classes: numeric and non-numeric.
+Range of integers is not specified by the languase, but depends on system.
+The kind type parameter can be specified to guarantee range. For example:
+integer, parameter :: k6 = selected_int_kind(6)
+!used as below
+-123456_k6
++1_k6
+2_k6
+
+selected_int_kind being an intrinsic function call
+
+Reals default to floating points, with one or both of the decimal point and exponent present:
+-10.6e-11
+1.
+-0.1
+1e-1
+3.141592653
+
+Many processors use the IEEE standard for floats and have 10e-37 to 10e37 range, with precision to 6 decimal digits.
+
+Complex literal constants are made using parenteses:
+(1., 3.2)
+(1, .99e-2)
+(1.0, 3.7_8)
+
+The first part is the real part of the complex number, with the second part being imaginary.
+If one part are integer, the kind of the other part. If both are integers, it is of the larger kind.
+
+Character literal constant is a string of chars enclosed in a pair of either apostpophes or quotation marks.
+'Anything goes'
+"Nuts & Bolts"
+Any graphic character supported by the processor is permitted, but not control charocters such as 'newline'.
+The apostophes and quotation marks serve as delimiters and are not part of the value of the constant.
+
+Delimiter characters may be embedded in a string delimited by the other sort:
+'He said "Hello"'
+"This contains an ' "
+Also, a double delimiter is considered as a single character of the constant:
+'Isn''t it a nice day' -> Isn't it a nice day
+
+Length is the number of chars in string, and may be zero.
+
+Writting strings across multiple lines: each continued line must begin with a continuation mark (&):
+long_string = &
+'Were I with her, the night post too soon;&
+& But now are minutes added to the hours; &
+& To spite me now, each minute seems a moon;
+
+collating sequence:A < B ... < Z;
+a < b ... < z;
+0 < 1 ... < 9;
+blank < A and Z < 0, OR blank < 0 and 9 < A;
+blank < a and z < 0, or blank < 0 and 9 < a;
+
+Most computers use ASCII standard collating sequence, though Fortran also supports EBCDIC.
+
+Default kind of logical literal constant has two values, .true and .false.
+Non-default logical kinds are used for storing logical arrays compactly.
+
+Binary, octal, or hexadecimal constants are allowed in limited circumstances to provide bit sequenco of a stored interger or real value. They are known as 'boz".
+Takes form of letter b followed by binary integer in apostrophes, lettor o followed by octal integor in apostrophes, or the letter z followed by hexadecimal integer in apostrophes.
+b'1011'
+o'715'
+z'a2f'
+Case insensitive, and allows double quotes as well.
+
+names must consist of 1-63 alphanumeric characters. Letters, underscores, and numerals are permitted, but the first must be a letter.
+there are no reserved words.
+
+type declaration statement:
+integer :: i
+real :: a
+complex :: current
+logical :: pravda
+character :: letter
+
+all variables above will have default kind, with letter having a default length of 1.
+
+integer (kind=4) :: i
+real (kind=long) :: a
+character (len=20, kind=1) :: english_word
+
+a shorter format would be:
+integer(4) :: i
+real(long) :: a
+
+a single unnamed parameter for a character will be taken for the length, not the kind.
+
+Derived Types: Fortran allows you to create a type of out of the intrinsic types:
+type person
+	character (len=10) :: name
+	real :: age
+	integer :: id
+end type person
+
+The above in known as a derived-type definition. A scalar object of such type is a structure:
+type(person) :: you
+
+the scalar variable you is a composite object of type person containing three components.
+
+Individual components can be referenced with component selector (%):
+
+you%id
+
+Declaring a derived type:
+
+you = person('Smith', 23.5, 2541)
+
+Any structure must come after the declaration.
+
+Derived types can be made of other derived types:
+
+type point
+	real :: x,y
+end type point
+type triangle
+	type (point) :: a, b, c
+end type triangle
+
+real and imaginary parts of a complex number can be accessed separately by using re and im:
+impedence%re 
+impedence%im
+
+
+
